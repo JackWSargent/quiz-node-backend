@@ -2,29 +2,29 @@
   "development": {
     "username": "postgres",
     "password": null,
-    "database": "quizDev",
+    "database": "blocipedia-dev",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false,
-    "operatorsAliases": 0
+    "operatorsAliases": false
   },
   "test": {
     "username": "postgres",
     "password": null,
-    "database": "quizTest",
+    "database": "blocipedia-test",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false,
-    "operatorsAliases": 0
+    "operatorsAliases": false
   },
   "production": {
     "username": "postgres",
     "password": null,
-    "database": "quizProduction",
+    "database": "blocipedia-production",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "logging": false,
-    "operatorsAliases": 0,
+    "operatorsAliases": false,
     "use_env_variable": "DATABASE_URL"
   }
 }

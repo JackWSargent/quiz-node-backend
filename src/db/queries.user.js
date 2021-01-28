@@ -43,26 +43,4 @@ module.exports = {
 				callback(err);
 			});
 	},
-	upgradeToPremium(id) {
-		return User.findByPk(id)
-			.then((user) => {
-				if (user) {
-					return user.update({ role: 1 });
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	},
-	downgradeToFree(id) {
-		return User.findByPk(id)
-			.then((user) => {
-				if (user) {
-					return user.update({ role: 0 });
-				}
-			})
-			.catch((err) => {
-				console.log(err);
-			});
-	},
 };

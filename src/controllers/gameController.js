@@ -1,6 +1,6 @@
 const gameQueries = require("../db/queries.game.js");
 const Authorizer = require("../policies/game");
-const collaborator = require("../db/models").Collaborator;
+// const collaborator = require("../db/models").Collaborator;
 module.exports = {
 	index(req, res, next) {
 		gameQueries.getAllGames((err, games) => {

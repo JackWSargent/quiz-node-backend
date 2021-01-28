@@ -1,15 +1,10 @@
 const express = require("express");
 const router = express.Router();
-//const validation = require("./validation");
-const wikiController = require("../controllers/wikiController");
+const gameController = require("../controllers/gameController");
 const helper = require("../auth/helpers");
-router.get("/wikis", wikiController.index);
-router.get("/wikis/new", wikiController.new);
-router.get("/wikis/private", wikiController.private);
-router.post("/wikis/create", helper.ensureAuthenticated, wikiController.create);
-router.get("/wikis/:id", wikiController.show);
-router.post("/wikis/:id/destroy", wikiController.destroy);
-router.get("/wikis/:id/edit", wikiController.edit);
-router.post("/wikis/:id/update", wikiController.update);
+router.get("/games", gameController.index);
+router.post("/games/create", helper.ensureAuthenticated, gameController.create);
+router.post("/games/:id/destroy", gameController.destroy);
+router.post("/games/:id/update", gameController.update);
 
 export default router;

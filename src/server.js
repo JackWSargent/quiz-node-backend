@@ -32,25 +32,42 @@ if (process.env.NODE_ENV === "test") {
 	const mockAuth = require("../spec/support/mock-auth.js");
 	mockAuth.fakeIt(app);
 }
-
+const helper = require("../auth/helpers");
 const port = process.env.PORT || "3000";
 app.set("port", port);
 
 // Controllers
 const userController = require("./controllers/userController.js");
+const gameController = require("./controllers/gameController.js");
+const questionController = require("./controllers/questionController.js");
 
 // Routes -- User
 
-// app.get("/users");
+app.get("/users", userController.retrieveUsers);
 app.post("/users/sign_up", validation.validateUsers, userController.create);
 app.post("/users/sign_in", validation.validateUsers, userController.signIn);
 app.get("/users/sign_out", userController.signOut);
 
 // Routes -- Game
 
+router.get("/games", gameController.index);
+router.post("/games/create", helper.ensureAuthenticated, gameController.create);
+router.post("/games/:id/destroy", gameController.destroy);
+router.post("/games/:id/update", gameController.update);
+
 // Routes -- Questions
 
+router.get("/questions", questionController.index);
+router.post("/questions/create", helper.ensureAuthenticated, questionController.create);
+router.post("/questions/:id/destroy", questionController.destroy);
+router.post("/questions/:id/update", questionController.update);
+
 // Routes -- Answers
+
+router.get("/answers", answerController.index);
+router.post("/answers/create", helper.ensureAuthenticated, answerController.create);
+router.post("/answers/:id/destroy", answerController.destroy);
+router.post("/answers/:id/update", answerController.update);
 
 const server = http.createServer(app);
 server.listen(port);
