@@ -1,7 +1,7 @@
 {
-  "name": "blocipedia",
+  "name": "usa-quiz",
   "version": "1.0.0",
-  "description": "Wiki for Bloc",
+  "description": "Quiz on the USA",
   "main": "src/server.js",
   "scripts": {
     "test": "set NODE_ENV=test&& jasmine",
@@ -37,5 +37,6 @@
     "sequelize-cli": "^6.2.0",
     "stripe": "^7.4.0",
     "yarn": "^1.22.10"
-  }
+  },
+  "devDependencies": {}
 }

@@ -1,13 +1,13 @@
 const ApplicationPolicy = require("./application");
-export default class CollaboratorPolicy extends ApplicationPolicy {
+export default class WikiPolicy extends ApplicationPolicy {
 	new() {
-		return this._isAdmin();
+		return this._isMember() || this._isAdmin();
 	}
 	create() {
 		return this.new();
 	}
 	edit() {
-		return this._isAdmin() || this._isOwner();
+		return this._isMember() || this._isAdmin();
 	}
 	update() {
 		return this.edit();
