@@ -1,5 +1,7 @@
 const ApplicationPolicy = require("./application");
-export default class AnswerPolicy extends ApplicationPolicy {
+module.exports = class AnswerPolicy extends (
+	ApplicationPolicy
+) {
 	new() {
 		return this._isMember() || this._isAdmin();
 	}
@@ -15,4 +17,4 @@ export default class AnswerPolicy extends ApplicationPolicy {
 	destroy() {
 		return this.update();
 	}
-}
+};

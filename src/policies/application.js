@@ -1,4 +1,4 @@
-export default class ApplicationPolicy {
+module.exports = class ApplicationPolicy {
 	constructor(user, record) {
 		this.record = record;
 		this.user = user;
@@ -24,4 +24,4 @@ export default class ApplicationPolicy {
 	destroy() {
 		return this.update();
 	}
-}
+};

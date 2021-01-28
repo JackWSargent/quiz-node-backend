@@ -1,4 +1,4 @@
-"use strict";
+("use strict");
 module.exports = (sequelize, DataTypes) => {
 	var Question = sequelize.define(
 		"Question",
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: "answerId",
 			onDelete: "CASCADE",
 		});
-		Game.addScope("getAnswer", (questionId) => {
+		Question.addScope("getAnswer", (questionId) => {
 			return {
 				include: [
 					{

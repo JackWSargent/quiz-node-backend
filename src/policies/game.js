@@ -1,5 +1,7 @@
 const ApplicationPolicy = require("./application");
-export default class WikiPolicy extends ApplicationPolicy {
+module.exports = class GamePolicy extends (
+	ApplicationPolicy
+) {
 	new() {
 		return this._isMember() || this._isAdmin();
 	}
@@ -15,4 +17,4 @@ export default class WikiPolicy extends ApplicationPolicy {
 	destroy() {
 		return this.update();
 	}
-}
+};
