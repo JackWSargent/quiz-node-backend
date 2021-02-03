@@ -12,10 +12,7 @@ module.exports = {
 			});
 	},
 	addQuestion(newQuestion, callback) {
-		return Question.create({
-			name: newQuestion.name,
-			userId: newQuestion.userId,
-		})
+		return Question.create(newQuestion)
 			.then((question) => {
 				callback(null, question);
 			})
@@ -54,17 +51,10 @@ module.exports = {
 		return Question.findByPk(req.params.id)
 			.then((question) => {
 				//console.log("found question");
-				const authorized = new Authorizer(req.user, question).destroy();
-				if (authorized) {
-					question.destroy().then((res) => {
-						//console.log("question destroyed");
-						callback(null, question);
-					});
-				} else {
-					//console.log("not authorized");
-					req.flash("notice", "You are not authorized to do that.");
-					callback(401);
-				}
+				question.destroy().then((res) => {
+					//console.log("question destroyed");
+					callback(null, question);
+				});
 			})
 			.catch((err) => {
 				//console.log("did not find question");
@@ -89,7 +79,6 @@ module.exports = {
 						callback(err);
 					});
 			} else {
-				req.flash("notice", "You are not authorized to do that.");
 				callback("Forbidden");
 			}
 		});

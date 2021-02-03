@@ -11,7 +11,7 @@ module.exports = {
 				callback(err);
 			});
 	},
-	addWiki(newGame, callback) {
+	addGame(newGame, callback) {
 		return Game.create({
 			name: newGame.name,
 			userId: newGame.userId,
@@ -24,23 +24,23 @@ module.exports = {
 				callback(err);
 			});
 	},
-	getGame(id, callback) {
+	getGame(req, callback) {
 		let results = {};
-		return Game.findByPk(id)
+		return Game.findByPk(req.params.id)
 			.then((game) => {
 				if (!game) {
 					callback(404);
 				} else {
 					results["game"] = game;
-					// Collaborator.scope({ method: ["collaborators", id] })
-					// 	.findAll()
-					// 	.then((collaborators) => {
-					// 		results["collaborators"] = collaborators;
-					// 		callback(null, results);
-					// 	})
-					// 	.catch((err) => {
-					// 		console.log(err);
-					// 	});
+					Game.scope({ method: ["getQuestions", req.params.id] })
+						.findAll()
+						.then((questions) => {
+							results["questions"] = questions;
+							callback(null, results);
+						})
+						.catch((err) => {
+							console.log(err);
+						});
 				}
 			})
 			.catch((err) => {
@@ -49,20 +49,41 @@ module.exports = {
 				callback(err);
 			});
 	},
+	updateGame(req, callback) {
+		return Game.findByPk(req.params.id).then((game) => {
+			if (!game) {
+				return callback("Game not found");
+			}
+			const user = req.user ? req.user : req.body.user;
+			const authorized = new Authorizer(user, game).update();
+			if (authorized) {
+				game.update(req.body.game, {
+					fields: Object.keys(req.body.game),
+				})
+					.then((res) => {
+						callback(null, res);
+					})
+					.catch((err) => {
+						callback(err);
+					});
+			} else {
+				callback("Forbidden");
+			}
+		});
+	},
 	deleteGame(req, callback) {
 		//console.log("in query");
 		return Game.findByPk(req.params.id)
-			.then((Game) => {
-				//console.log("found Game");
-				const authorized = new Authorizer(req.user, Game).destroy();
+			.then((game) => {
+				//console.log("found game");
+				const authorized = new Authorizer(req.user, game).destroy();
 				if (authorized) {
-					Game.destroy().then((res) => {
-						//console.log("Game destroyed");
-						callback(null, Game);
+					game.destroy().then((res) => {
+						//console.log("game destroyed");
+						callback(null, game);
 					});
 				} else {
 					//console.log("not authorized");
-					req.flash("notice", "You are not authorized to do that.");
 					callback(401);
 				}
 			})
@@ -70,27 +91,5 @@ module.exports = {
 				//console.log("did not find Game");
 				callback(err);
 			});
-	},
-	updateGame(req, updatedGame, callback) {
-		return Game.findByPk(req.params.id).then((game) => {
-			if (!game) {
-				return callback("game not found");
-			}
-			const authorized = new Authorizer(req.user, game).update();
-			if (authorized) {
-				game.update(updatedGame, {
-					fields: Object.keys(updatedGame),
-				})
-					.then(() => {
-						callback(null, game);
-					})
-					.catch((err) => {
-						callback(err);
-					});
-			} else {
-				req.flash("notice", "You are not authorized to do that.");
-				callback("Forbidden");
-			}
-		});
 	},
 };

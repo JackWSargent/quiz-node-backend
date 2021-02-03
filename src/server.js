@@ -53,7 +53,13 @@ app.get("/users/sign_out", userController.signOut);
 // Routes -- Game
 
 app.get("/games", gameController.index);
-app.post("/games/create", helper.ensureAuthenticated, gameController.create);
+app.get("/game/:id", gameController.getGame);
+app.post(
+	"/games/create",
+	// helper.ensureAuthenticated,
+	gameController.create
+);
+app.post("/build_game", gameController.buildGame);
 app.post("/games/:id/destroy", gameController.destroy);
 app.post("/games/:id/update", gameController.update);
 

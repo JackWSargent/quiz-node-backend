@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				allowNull: false,
 			},
-			ownerId: {
+			userId: {
 				type: DataTypes.INTEGER,
 				allowNull: false,
 			},
@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: "gameId",
 			as: "answers",
 		});
+		Game.hasMany(models.GameSession, {
+			foreignKey: "gameId",
+			as: "gameSessions",
+		});
 		Game.addScope("getQuestions", (gameId) => {
 			return {
 				include: [
@@ -35,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
 					},
 				],
 				where: { gameId: gameId },
-				order: [["createdAt", "DESC"]],
+				order: [["id", "ASC"]],
 			};
 		});
 		Game.addScope("getAnswers", (gameId) => {
@@ -46,7 +50,23 @@ module.exports = (sequelize, DataTypes) => {
 					},
 				],
 				where: { gameId: gameId },
-				order: [["createdAt", "DESC"]],
+				order: [["createdAt", "ASC"]],
+			};
+		});
+		Game.addScope("getQuestionsAndAnswers", (gameId) => {
+			return {
+				include: [
+					{
+						model: models.Question,
+					},
+					{
+						model: models.Answer,
+					},
+				],
+				where: {
+					gameId: gameId,
+				},
+				order: [["createdAt", "ASC"]],
 			};
 		});
 	};

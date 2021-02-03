@@ -1,4 +1,5 @@
 const User = require("./models").User;
+const bcrypt = require("bcryptjs");
 module.exports = {
 	createUser(newUser, callback) {
 		const salt = bcrypt.genSaltSync();
@@ -11,6 +12,7 @@ module.exports = {
 				callback(null, user);
 			})
 			.catch((err) => {
+				console.log(err);
 				callback(err);
 			});
 	},
@@ -21,6 +23,7 @@ module.exports = {
 				callback(404);
 			} else {
 				result["user"] = user;
+				callback(null, result);
 				// Collaborator.scope({ method: ["collaborator", id] })
 				// 	.findAll()
 				// 	.then((collaborator) => {

@@ -1,5 +1,5 @@
 const Answer = require("./models").Answer;
-const Authorizer = require("../policies/question.js");
+const Authorizer = require("../policies/answer.js");
 module.exports = {
 	getAllAnswers(callback) {
 		Answer.findAll()
@@ -13,7 +13,7 @@ module.exports = {
 	},
 	addAnswer(newAnswer, callback) {
 		return Answer.create({
-			name: newAnswer.name,
+			content: newAnswer.content,
 			userId: newAnswer.userId,
 		})
 			.then((answer) => {
@@ -62,7 +62,6 @@ module.exports = {
 					});
 				} else {
 					//console.log("not authorized");
-					req.flash("notice", "You are not authorized to do that.");
 					callback(401);
 				}
 			})
@@ -71,25 +70,25 @@ module.exports = {
 				callback(err);
 			});
 	},
-	updateAnswer(req, updatedAnswer, callback) {
-		return answer.findByPk(req.params.id).then((answer) => {
+	updateAnswer(req, callback) {
+		return Answer.findByPk(req.params.id).then((answer) => {
 			if (!answer) {
-				return callback("answer not found");
+				return callback("Answer not found");
 			}
-			const authorized = new Authorizer(req.user, answer).update();
+			const user = req.user ? req.user : req.body.user;
+			const authorized = new Authorizer(user, answer).update();
 			if (authorized) {
 				answer
-					.update(updatedAnswer, {
-						fields: Object.keys(updatedAnswer),
+					.update(req.body.answer, {
+						fields: Object.keys(req.body.answer),
 					})
-					.then(() => {
-						callback(null, answer);
+					.then((res) => {
+						callback(null, res);
 					})
 					.catch((err) => {
 						callback(err);
 					});
 			} else {
-				req.flash("notice", "You are not authorized to do that.");
 				callback("Forbidden");
 			}
 		});

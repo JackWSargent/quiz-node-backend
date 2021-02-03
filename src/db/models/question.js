@@ -17,7 +17,20 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			answerId: {
 				type: DataTypes.INTEGER,
+				allowNull: true,
+			},
+			type: {
+				type: DataTypes.STRING,
 				allowNull: false,
+			},
+			options: {
+				type: DataTypes.STRING,
+				get: function () {
+					return JSON.parse(this.getDataValue("options"));
+				},
+				set: function (val) {
+					return this.setDataValue("options", JSON.stringify(val));
+				},
 			},
 		},
 		{}

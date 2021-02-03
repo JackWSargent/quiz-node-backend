@@ -3,18 +3,21 @@ module.exports = class AnswerPolicy extends (
 	ApplicationPolicy
 ) {
 	new() {
-		return this._isMember() || this._isAdmin();
+		return this._isAdmin();
 	}
 	create() {
-		return this.new();
+		return this._isAdmin();
 	}
 	edit() {
-		return this._isMember() || this._isAdmin();
+		return this._isAdmin();
+	}
+	show() {
+		return this._isAdmin() || this._isMember();
 	}
 	update() {
-		return this.edit();
+		return this._isAdmin();
 	}
 	destroy() {
-		return this.update();
+		return this._isAdmin();
 	}
 };
