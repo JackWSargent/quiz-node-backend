@@ -27,28 +27,6 @@ module.exports = (sequelize, DataTypes) => {
 			foreignKey: "gameId",
 			as: "questions",
 		});
-		// GameSession.addScope("getQuestions", (gameId) => {
-		// 	return {
-		// 		include: [
-		// 			{
-		// 				model: models.Question,
-		// 			},
-		// 		],
-		// 		where: { gameId: gameId },
-		// 		order: [["createdAt", "DESC"]],
-		// 	};
-		// });
-		// GameSession.addScope("getAnswers", (gameId) => {
-		// 	return {
-		// 		include: [
-		// 			{
-		// 				model: models.Answer,
-		// 			},
-		// 		],
-		// 		where: { gameId: gameId },
-		// 		order: [["createdAt", "DESC"]],
-		// 	};
-		// });
 	};
 	return GameSession;
 };

@@ -20,7 +20,7 @@ PATH="/usr/local/var/postgres:$PATH"
 ```
 
 ```
-postgres start
+pg_ctl start
 
 yarn dev
 ```

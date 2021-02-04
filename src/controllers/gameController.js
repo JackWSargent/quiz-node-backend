@@ -17,72 +17,72 @@ module.exports = {
 		const auth1 = new Authorizer(info.user).create();
 		const auth2 = new Authorizer(info.user).update();
 		const auth3 = new Authorizer(info.user).destroy();
-		if(auth1 && auth2 && auth3){
-			const newGame = {name: info.game.name, userId: info.user.id}
+		if (auth1 && auth2 && auth3) {
+			const newGame = { name: info.game.name, userId: info.user.id };
 			/* 1. Create Game
-			*  2. Create Question
-			*  3. Create Answer w/Question ID
-			*  4. Update Question w/Answer ID
-			*  5. Return Game with Questions and Answers
-			*/ 
+			 *  2. Create Question
+			 *  3. Create Answer w/Question ID
+			 *  4. Update Question w/Answer ID
+			 *  5. Return Game with Questions and Answers
+			 */
 			gameQueries.addGame(newGame, (err, game) => {
-				if(err){
-					return res.status(400).send("Unable to create game")
+				if (err) {
+					return res.status(400).send("Unable to create game");
 				} else {
 					console.log("Game " + info.game.name + " has been created");
-					for(let i = 0; i < info.questions.length; i++){
+					for (let i = 0; i < info.questions.length; i++) {
 						let currentQuestion = info.questions[i];
 						let currentAnswer = info.answers[i];
 						let newQuestion = {
-							content = currentQuestion.content,
-							userId = info.user.id,
-							gameId = game.id,
-						}
+							content: currentQuestion.content,
+							userId: info.user.id,
+							gameId: game.id,
+						};
 						questionQueries.addQuestion(newQuestion, (err, question) => {
-							if(err){
-								return res.status(400).send("Unable to create question")
+							if (err) {
+								return res.status(400).send("Unable to create question");
 							} else {
 								let newAnswer = {
-									content = currentAnswer.content,
-									userId = info.user.id,
-									gameId = game.id,
-									questionId = question.id
-								}
+									content: currentAnswer.content,
+									userId: info.user.id,
+									gameId: game.id,
+									questionId: question.id,
+								};
 								answerQueries.addAnswer(newAnswer, (err, answer) => {
-									if(err){
-										return res.status(400).send('Unable to create answer')
+									if (err) {
+										return res.status(400).send("Unable to create answer");
 									} else {
 										let questionAndAnswer = {
-											...question, answerId: answer.id
-										}
+											...question,
+											answerId: answer.id,
+										};
 										questionQueries.updateQuestion(questionAndAnswer, (err, updatedQuestion) => {
-											if(err) {
-												return res.status(400).send('Unable to update question')
+											if (err) {
+												return res.status(400).send("Unable to update question");
 											}
-										})
+										});
 									}
-								})
+								});
 							}
-						})
+						});
 					}
-					info.questions.forEach(question => {
+					info.questions.forEach((question) => {
 						let newQuestion = {
-							content = question.content,
-							userId = info.user.id,
-							gameId = newGame.id,
-						}
-						
-					})
-					info.answers.forEach(answer => {
+							content: question.content,
+							userId: info.user.id,
+							gameId: newGame.id,
+						};
+					});
+					info.answers.forEach((answer) => {
 						let newAnswer = {
 							content: answer.content,
 							userId: info.user.id,
 							gameId: newGame.id,
-						}
-						answerQueries.addAnswer()
-					})
+						};
+						answerQueries.addAnswer();
+					});
 				}
-			})
+			});
 		}
 	},
 	getGame(req, res, next) {

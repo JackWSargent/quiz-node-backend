@@ -10,8 +10,12 @@ const expressValidator = require("express-validator");
 const session = require("express-session");
 const flash = require("express-flash");
 const passportConfig = require("./passport-config");
+// const urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
+var cors = require("cors");
+app.use(cors()); // Use this after the variable declaration
 app.use(
 	session({
 		secret: process.env.cookieSecret,
